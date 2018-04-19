@@ -41,7 +41,9 @@ void send(int n)
 	for (i = 0; i < n; i++) {
 		printf(F("kill(%d, SIGUSR1);\n"), parent_pid);
 		kill(parent_pid, SIGUSR1);
+		sleep(1);
 	}
 	printf(F("kill(%d, SIGUSR2);\n"), parent_pid);
 	kill(parent_pid, SIGUSR2);
+	sleep(1);
 }
