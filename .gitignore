@@ -1,3 +1,7 @@
 child
 parent
 *.o
+child
+*.o
+parent
+pru

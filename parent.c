@@ -11,7 +11,7 @@
 
 #define F(fmt) "[%d]:"__FILE__":%d:%s: " fmt, my_pid, __LINE__, __func__
 
-#define NCHILDREN 8
+#define NCHILDREN 2
 
 char child[] = "child";
 
@@ -56,10 +56,11 @@ void handler(int sig, siginfo_t *info, void *unused)
 		break;
 
 	case SIGUSR2: 
-		printf(F("received number %d from child <%d>\n"),
+		printf(F("received number %d from child <%d>, sending SIGUSR1 to acknowledge\n"),
 			p->c_val, p->c_pid);
 		p->c_list[p->c_listsz++] = p->c_val;
 		p->c_val = 0;
+		kill(p->c_pid, SIGUSR1);
 		break;
 
 	} /* switch */
