@@ -8,28 +8,40 @@
 
 #define F(fmt) "<%d>:"__FILE__":%d:%s: " fmt, my_pid, __LINE__, __func__
 
-pid_t my_pid;
+pid_t my_pid, parent_pid;
+
+void send(int n);
 
 int main()
 {
-	pid_t parent_pid = getppid();
+	parent_pid = getppid();
+	my_pid = getpid();
+
+	/* init random */
 	struct timeval now;
 	gettimeofday(&now, NULL);
 	srand((int)now.tv_sec ^ (int)now.tv_usec);
-	my_pid = getpid();
+
 	int sum = 0;
 
 	int n = rand() % 3 + 1;
 	int i;
 	for (i = 0; i < n; i++) {
-		int number = rand() % 10 + 10;
-		printf(F("Sending %d\n"), number);
-		int j;
-		for (j = 0; j < number; j++) {
-			printf(F("kill(%d, SIGUSR1);\n"), parent_pid);
-			kill(parent_pid, SIGUSR1);
-		}
+		int number = rand() % 3 + 1;
+		send(number);
 		sum += number;
 	}
-	printf(F("my sum = %d\n"), sum);
+	printf(F("my sum is %d\n"), sum);
+}
+
+void send(int n)
+{
+	int i;
+	printf(F("Sending %d\n"), n);
+	for (i = 0; i < n; i++) {
+		printf(F("kill(%d, SIGUSR1);\n"), parent_pid);
+		kill(parent_pid, SIGUSR1);
+	}
+	printf(F("kill(%d, SIGUSR2);\n"), parent_pid);
+	kill(parent_pid, SIGUSR2);
 }
