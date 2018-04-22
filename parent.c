@@ -17,11 +17,6 @@ char child[] = "child";
 
 pid_t my_pid;
 
-struct child {
-	pid_t c_pid;
-	int c_val;
-}children[NCHILDREN];
-
 int sum = 0; /* here's where the number of signals is accumulated */
 
 void handler(int sig, siginfo_t *info, void *unused)
@@ -31,7 +26,6 @@ void handler(int sig, siginfo_t *info, void *unused)
 	}
 }
 	
-
 int main()
 {
 	int i;
